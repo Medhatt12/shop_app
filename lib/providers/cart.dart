@@ -20,13 +20,13 @@ class Cart with ChangeNotifier {
     return {..._items};
   }
 
-  int get itemCount{
+  int get itemCount {
     return _items.length;
   }
 
-  double get totalAmount{
+  double get totalAmount {
     var total = 0.0;
-    _items.forEach((key, cartItem) { 
+    _items.forEach((key, cartItem) {
       total += cartItem.price * cartItem.quantity;
     });
     return total;
@@ -35,26 +35,52 @@ class Cart with ChangeNotifier {
   void addItem(String productId, double price, String title) {
     if (_items.containsKey(productId)) {
       //change quantity
-      _items.update(productId, (existingCartItem) => CartItem(id: existingCartItem.id, title: existingCartItem.title, quantity: existingCartItem.quantity+1, price: existingCartItem.price));
+      _items.update(
+          productId,
+          (existingCartItem) => CartItem(
+              id: existingCartItem.id,
+              title: existingCartItem.title,
+              quantity: existingCartItem.quantity + 1,
+              price: existingCartItem.price));
     } else {
       _items.putIfAbsent(
           productId,
           () => CartItem(
-              id: DateTime.now().toString(), 
-              title: title, 
+              id: DateTime.now().toString(),
+              title: title,
               price: price,
               quantity: 1));
     }
     notifyListeners();
   }
 
-  void removeItem(String productId){
+  void removeItem(String productId) {
     _items.remove(productId);
     notifyListeners();
   }
 
-  void clear(){
+  void clear() {
     _items = {};
     notifyListeners();
+  }
+
+  void removeSingleItem(String productId) {
+    
+    if (!_items.containsKey(productId)) {
+      return;
+    }
+    if (_items[productId].quantity > 1) {
+      _items.update(
+          productId,
+          (existingCardItem) => CartItem(
+              id: existingCardItem.id,
+              title: existingCardItem.title,
+              quantity: existingCardItem.quantity - 1,
+              price: existingCardItem.price));
+    } else {
+      _items.remove(productId);
+    }
+    notifyListeners();
+    
   }
 }

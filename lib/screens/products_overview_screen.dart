@@ -51,6 +51,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                   ]),
           Consumer<Cart>(
             builder: (_, cart, ch) => Badge(
+              color: Colors.red,
               child: ch,
               value: cart.itemCount.toString(),
             ),

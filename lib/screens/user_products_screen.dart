@@ -16,9 +16,11 @@ class UserProductsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Your Products'),
         actions: <Widget>[
-          IconButton(onPressed: () {
-            Navigator.of(context).pushNamed(EditProductScreen.routeName);
-          }, icon: const Icon(Icons.add))
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(EditProductScreen.routeName);
+              },
+              icon: const Icon(Icons.add))
         ],
       ),
       drawer: AppDrawer(),
@@ -28,9 +30,9 @@ class UserProductsScreen extends StatelessWidget {
           itemCount: productsData.items.length,
           itemBuilder: (_, i) => Column(
             children: <Widget>[
-              UserProductItem(
+              UserProductItem(productsData.items[i].id,
                   productsData.items[i].title, productsData.items[i].imageUrl),
-                  Divider()
+              Divider()
             ],
           ),
         ),

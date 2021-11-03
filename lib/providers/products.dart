@@ -48,6 +48,9 @@ class Products with ChangeNotifier {
     return [..._items];
   }
 
+  final String authToken;
+  Products(this.authToken,this._items);
+
   List<Product> get favoriteItems {
     return _items.where((prodItem) => prodItem.isFavorite).toList();
   }
@@ -63,7 +66,7 @@ class Products with ChangeNotifier {
 
   Future<void> fetchAndSetProducts() async {
     final url = Uri.parse(
-        'https://flutter-update-d0886-default-rtdb.firebaseio.com/products.json');
+        'https://flutter-update-d0886-default-rtdb.firebaseio.com/products.json?auth=$authToken');
 
     try {
       final response = await http.get(url);
@@ -96,7 +99,7 @@ class Products with ChangeNotifier {
   Future<void> addProduct(Product product) async {
     //_items.add(value);
     final url = Uri.parse(
-        'https://flutter-update-d0886-default-rtdb.firebaseio.com/products.json');
+        'https://flutter-update-d0886-default-rtdb.firebaseio.com/products.json?auth=$authToken');
     try {
       final response = await http.post(
         url,
@@ -105,7 +108,7 @@ class Products with ChangeNotifier {
           'description': product.description,
           'imageUrl': product.imageUrl,
           'price': product.price,
-          //'isFavorite': product.isFavorite,
+          'isFavorite': product.isFavorite,
         }),
       );
 
@@ -130,7 +133,7 @@ class Products with ChangeNotifier {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
       final url = Uri.parse(
-          'https://flutter-update-d0886-default-rtdb.firebaseio.com/products/$id.json');
+          'https://flutter-update-d0886-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken');
       await http.patch(url,
           body: json.encode({
             'title': newProduct.title,
@@ -148,7 +151,7 @@ class Products with ChangeNotifier {
 
   Future<void> deleteProduct(String id) async {
     final url = Uri.parse(
-        'https://flutter-update-d0886-default-rtdb.firebaseio.com/products/$id.json');
+        'https://flutter-update-d0886-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken');
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     var existingProduct = _items[existingProductIndex];
     //_items.removeAt(existingProductIndex);
